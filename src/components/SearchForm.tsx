@@ -1,7 +1,11 @@
-import { FC, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const SearchForm: FC = () => {
+type Props = {
+  query?: string;
+};
+
+const SearchForm: FC<Props> = ({ query }) => {
   const navigate = useNavigate();
   const inputElement = useRef<HTMLInputElement>(null);
 
@@ -11,6 +15,15 @@ const SearchForm: FC = () => {
       navigate(`/result/?q=${String(inputKeyword?.value)}`);
     }
   };
+
+  useEffect(() => {
+    if (query != null && inputElement != null) {
+      const inputKeyword = inputElement.current;
+      if (inputKeyword !== null) {
+        inputKeyword.value = query;
+      }
+    }
+  }, [query]);
 
   return (
     <div>

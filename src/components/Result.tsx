@@ -24,14 +24,13 @@ const Result: FC = () => {
   const location = useLocation();
   const search = location.search;
   const query = useMemo(() => new URLSearchParams(search), [search]);
+  const queryString = query.get('q')?.toString() || '';
   const [photoList, setPhotoList] = useState<Photo[]>([]);
   const UNSPLASH_CLIENT_ID = import.meta.env.VITE_UNSPLASH_API_KEY as string;
 
   useEffect(() => {
     fetch(
-      `https://api.unsplash.com/search/photos?query=${String(
-        query,
-      )}&client_id=${UNSPLASH_CLIENT_ID}`,
+      `https://api.unsplash.com/search/photos?query=${queryString}&client_id=${UNSPLASH_CLIENT_ID}`,
     )
       .then((response) => response.json())
       .then((data: Response) => setPhotoList(data.results))
@@ -39,13 +38,13 @@ const Result: FC = () => {
         console.error(err);
         alert('Error!');
       });
-  }, [query, UNSPLASH_CLIENT_ID]);
+  }, [queryString, UNSPLASH_CLIENT_ID]);
 
   return (
     <>
-      <SearchForm />
+      <SearchForm query={queryString} />
       <div className="result">
-        <h1>search result, query: {query.get('q')}</h1>
+        <h1>search result, query: {queryString}</h1>
         <div className="photo-list">
           {photoList.map((photo: Photo) => (
             <a href={photo.links.html} key={photo.id}>
