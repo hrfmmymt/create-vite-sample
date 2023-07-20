@@ -13,7 +13,7 @@ type Photo = {
   alt_description: string;
 };
 
-type Response = {
+type ResponseData = {
   results: Photo[];
   total: number;
   total_pages: number;
@@ -33,7 +33,7 @@ const Result: FC = () => {
       `https://api.unsplash.com/search/photos?query=${queryString}&client_id=${UNSPLASH_CLIENT_ID}`,
     )
       .then((response) => response.json())
-      .then((data: Response) => setPhotoList(data.results))
+      .then((data: ResponseData) => setPhotoList(data.results))
       .catch((err) => {
         console.error(err);
         alert('Error!');
